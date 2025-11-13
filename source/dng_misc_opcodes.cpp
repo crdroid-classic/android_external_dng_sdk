@@ -407,12 +407,17 @@ void dng_opcode_MapTable::ProcessArea (dng_negative & /* negative */,
 	
 	if (overlap.NotEmpty ())
 		{
-		
-		for (uint32 plane = fAreaSpec.Plane ();
-			 plane < fAreaSpec.Plane () + fAreaSpec.Planes () &&
-			 plane < buffer.Planes ();
-			 plane++)
+// BEGIN GOOGLE MODIFICATION
+		const uint32 planeStart = fAreaSpec.Plane ();
+		const uint32 planeCount = fAreaSpec.Planes ();
+		const uint32 bufferPlanes = buffer.Planes ();
+
+		for (uint32 plane = planeStart;
+			 plane < bufferPlanes &&
+			 plane - planeStart < planeCount;
+			 ++plane)
 			{
+// END GOOGLE MODIFICATION
 			
 			DoMapArea16 (buffer.DirtyPixel_uint16 (overlap.t, overlap.l, plane),
 						 1,
